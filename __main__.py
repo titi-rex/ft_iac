@@ -155,7 +155,7 @@ set secgroup
 inject env ?
 """
 # Create Key Pair
-# key_pair = aws.ec2.KeyPair("app-key-pair", public_key="YOUR_PUBLIC_KEY")
+key_pair = aws.ec2.KeyPair("app-key-pair", public_key=config.get("key.pub"))
 
 ## [3.0 : IAM instance profile for code deploy]
 """ 

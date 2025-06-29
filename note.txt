@@ -17,7 +17,10 @@ sql password
 ec2 ssh public key
 ec2 ssh private key
 
-
+curl -sSL https://get.pulumi.com | sh
+https://www.pulumi.com/registry/packages/aws/api-docs/rds/
+https://www.pulumi.com/registry/packages/aws/api-docs/ec2/
+https://www.pulumi.com/tutorials/abstraction-encapsulation/component-resources/
 
 
 ami 
