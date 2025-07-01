@@ -40,14 +40,10 @@ rm passwd.secret""", rds.secret.arn, rds.rds.address, rds.username)
                     {
                         "Effect": "Allow",
                         "Principal": {
-                            "Service": "ec2.amazonaws.com"
-                        },
-                        "Action": "sts:AssumeRole"
-                    },
-                    {
-                        "Effect": "Allow",
-                        "Principal": {
-                            "Service": "codedeploy.amazonaws.com"
+                            "Service": [
+                                "ec2.amazonaws.com",
+                                "codedeploy.amazonaws.com"
+                            ]
                         },
                         "Action": "sts:AssumeRole"
                     }
@@ -64,15 +60,12 @@ rm passwd.secret""", rds.secret.arn, rds.rds.address, rds.username)
                         "Effect": "Allow",
                         "Action": "secretsmanager:GetSecretValue",
                         "Resource": "*"
-                    }
+                    },
                     {
                         "Effect": "Allow",
                         "Action": [
                             "s3:Get*",
-                            "s3:List*",
-                            "codedeploy:*",
-                            "ec2:Describe*",
-                            "iam:PassRole"
+                            "s3:List*"
                         ],
                         "Resource": "*"
                     }
