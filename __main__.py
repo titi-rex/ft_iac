@@ -4,6 +4,7 @@ from component.vpc import MyVpc
 from component.bucket import MyBucket
 from component.rds import MyRds
 from component.ec2 import MyEc2
+from component.codedeploy import MyCodeDeploy
 
 config = pulumi.Config()
 
@@ -28,3 +29,7 @@ app = MyEc2("app-myec2",
             rds=rds)
 pulumi.export("ec2Output", app.myOutputs)
 
+cd_app = MyCodeDeploy("app-cd")
+
+
+pulumi.export("codedeployOutput", cd_app.myOutputs)

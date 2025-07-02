@@ -39,19 +39,19 @@ class MyVpc(pulumi.ComponentResource):
                                              opts=pulumi.ResourceOptions(parent=self))
         self.appSecurityGroup.create_ingress_rule("allow_ssh", 
                                                   22, 
-                                                  cidr_ipv4="109.24.189.58/32")
+                                                  cidr_ipv4="0.0.0.0/0")
         self.appSecurityGroup.create_ingress_rule("allow_http", 
                                                   80,
                                                   cidr_ipv4="0.0.0.0/0")
-        self.appSecurityGroup.create_egress_rule("allow_all", 
-                                                  0, 
-                                                  cidr_ipv4="0.0.0.0/0",
-                                                  protocol="-1")
+        self.appSecurityGroup.create_egress_rule("allow_all",
+                                                 0, 
+                                                 cidr_ipv4="0.0.0.0/0",
+                                                 protocol="-1")
         
         self.rdsSecurityGroup = MySecurityGroup("rds",
-                                             self.vpc.id,
-                                             description="Security Group for private RDS instance",
-                                             opts=pulumi.ResourceOptions(parent=self))
+                                                self.vpc.id,
+                                                description="Security Group for private RDS instance",
+                                                opts=pulumi.ResourceOptions(parent=self))
         self.rdsSecurityGroup.create_ingress_rule("allow_mysql", 
                                                   3306, 
                                                   cidr_ipv4="0.0.0.0/0")
@@ -62,13 +62,13 @@ class MyVpc(pulumi.ComponentResource):
 
 
         self.rt = aws.ec2.RouteTable(f"{name}-rt-toigw",
-                                         vpc_id=self.vpc.id,
-                                         routes=[{"cidr_block": "0.0.0.0/0", "gateway_id": self.igw.id}],
-                                         opts=pulumi.ResourceOptions(parent=self))
+                                    vpc_id=self.vpc.id,
+                                    routes=[{"cidr_block": "0.0.0.0/0", "gateway_id": self.igw.id}],
+                                    opts=pulumi.ResourceOptions(parent=self))
         rta = aws.ec2.RouteTableAssociation(f"{name}-route-table-association",
-                                                                subnet_id=self.publicSubnets[0].id,
-                                                                route_table_id=self.rt.id,
-                                                                opts=pulumi.ResourceOptions(parent=self))
+                                            subnet_id=self.publicSubnets[0].id,
+                                            route_table_id=self.rt.id,
+                                            opts=pulumi.ResourceOptions(parent=self))
 
         self.register_outputs(self.myOutputs)
 

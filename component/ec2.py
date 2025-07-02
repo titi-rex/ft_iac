@@ -32,7 +32,7 @@ echo MYSQL_PASSWORD=$(cat passwd.secret) >> .env
 rm passwd.secret""", rds.secret.arn, rds.rds.address, rds.username)
         self.myOutputs[f"{name}user_data"] = user_data
 
-        # Define the IAM role and policy for the EC2 instance to access the secret
+        # IAM role and policy to access the secret and use codeploy
         role = aws.iam.Role(f"{name}-role", 
             assume_role_policy="""{
                 "Version": "2012-10-17",
@@ -73,6 +73,7 @@ rm passwd.secret""", rds.secret.arn, rds.rds.address, rds.username)
             }""",
             opts=pulumi.ResourceOptions(parent=self))
 
+
         instance_profile = aws.iam.InstanceProfile(f"{name}-instance-profile",
                                                    role=role.name,
                                                    opts=pulumi.ResourceOptions(parent=self))
@@ -91,23 +92,12 @@ rm passwd.secret""", rds.secret.arn, rds.rds.address, rds.username)
                                         ami=ami_id,
                                         iam_instance_profile=instance_profile.name,
                                         user_data=user_data,
+                                        tags={
+                                            "type": "app-instance-cd"
+                                        },
                                         opts=pulumi.ResourceOptions(parent=self))
         self.myOutputs[f"{name}InstanceId"] = self.instance.id
         self.myOutputs[f"{name}InstancePubIp"] = self.instance.public_ip
         self.myOutputs[f"{name}InstancePubDns"] = self.instance.public_dns
 
         self.register_outputs(self.myOutputs)
-
-
-"""
-create key pair
-disallow ssh traffic or restrict to actual ip for dev
-allow http/s
-set vpc
-set subnet
-set secgroup
-inject env ?
-ami = aws.get_ami(most_recent=True,
-                  owners=["amazon"],
-                  filters=[{"name": "name", "values": ["amzn2-ami-hvm-*-x86_64-gp2"]}])
-"""

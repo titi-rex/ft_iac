@@ -5,7 +5,7 @@ import pulumi_aws as aws
 class MyBucket(pulumi.ComponentResource):
     """
     S3 Bucket = store data
-    Used to store codebase for deployement
+    Used to store codebase for deployment
     """
 
     def __init__(self, name, opts = None):
